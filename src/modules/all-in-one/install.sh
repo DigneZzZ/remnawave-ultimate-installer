@@ -272,13 +272,9 @@ install_all_in_one() {
     
     # Install management scripts
     display_section "$ICON_TOOLS" "Установка управляющих скриптов"
-    
-    if ! install_remnawave_script; then
-        display_warning "remnawave скрипт не установлен"
-    fi
-    
-    if ! install_remnanode_script; then
-        display_warning "remnanode скрипт не установлен"
+    if ! install_management_scripts "all"; then
+        display_warning "Управляющие скрипты не установлены"
+        display_info "Можно установить вручную: bash install.sh → Tools → Management Scripts"
     fi
     
     # Save installation info

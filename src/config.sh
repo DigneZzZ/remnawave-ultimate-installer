@@ -18,7 +18,7 @@ readonly PROJECT_DIR="remnawave-ultimate-installer"
 # Base directories
 readonly BASE_DIR="/opt/remnawave"
 readonly PANEL_DIR="$BASE_DIR/panel"
-readonly NODE_DIR="$BASE_DIR/node"
+readonly NODE_DIR="/opt/remnanode"
 readonly NGINX_DIR="$BASE_DIR/nginx"
 readonly CADDY_DIR="$BASE_DIR/caddy"
 readonly SELFSTEAL_DIR="$BASE_DIR/selfsteal"

@@ -66,16 +66,15 @@ show_main_menu() {
         echo -e "${WHITE}   🔌 Integrations:${NC}"
         display_separator "" 40
         display_menu_item "8" "WARP" "Cloudflare WARP integration"
-        display_menu_item "9" "Monitoring" "Beszel / Grafana / Prometheus"
-        display_menu_item "10" "VPN Setup" "Netbird integration"
+        display_menu_item "9" "VPN Setup" "Netbird integration"
         echo
         
         echo -e "${WHITE}   🛠️  Tools:${NC}"
         display_separator "" 40
+        display_menu_item "10" "Management Scripts" "Install remnawave/remnanode/selfsteal"
         display_menu_item "11" "Backup & Restore" "Manage backups"
         display_menu_item "12" "Update" "Update components"
         display_menu_item "13" "Status" "View system status"
-        display_menu_item "14" "Templates" "Change SNI templates"
         echo
         
         display_menu_item "0" "Exit" ""
@@ -92,15 +91,14 @@ show_main_menu() {
             3) menu_install_all_in_one ;;
             4) menu_install_selfsteal ;;
             5) menu_configure_proxy ;;
-            6) menu_configure_security ;;
-            7) menu_configure_ssl ;;
+            6) choose_security_level ;;
+            7) configure_ssl ;;
             8) menu_integration_warp ;;
-            9) menu_integration_monitoring ;;
-            10) menu_integration_vpn ;;
+            9) menu_integration_vpn ;;
+            10) menu_management_scripts ;;
             11) menu_backup_restore ;;
             12) menu_update ;;
             13) menu_status ;;
-            14) menu_templates ;;
             0) 
                 echo
                 display_info "Thank you for using Remnawave Ultimate Installer!"
@@ -477,19 +475,6 @@ menu_integration_warp() {
     read -p "Press Enter to continue..."
 }
 
-menu_integration_monitoring() {
-    clear
-    display_banner "$SCRIPT_VERSION"
-    display_section "$ICON_CHART" "Monitoring Setup"
-    
-    display_info "Available monitoring solutions:"
-    echo -e "${GRAY}   • Beszel (lightweight monitoring)${NC}"
-    echo -e "${GRAY}   • Grafana + Prometheus (advanced metrics)${NC}"
-    echo
-    
-    display_warning "Feature coming soon!"
-    read -p "Press Enter to continue..."
-}
 
 menu_integration_vpn() {
     clear
@@ -512,62 +497,39 @@ menu_backup_restore() {
     display_banner "$SCRIPT_VERSION"
     display_section "$ICON_FOLDER" "Backup & Restore"
     
-    echo
-    display_menu_item "1" "Create Backup" "Create full system backup"
-    display_menu_item "2" "Restore from Backup" "Restore from existing backup"
-    display_menu_item "3" "List Backups" "View all backups"
-    display_menu_item "4" "Delete Backup" "Remove old backup"
-    display_menu_item "5" "Automatic Backup" "Setup scheduled backups"
-    display_menu_item "0" "Back" ""
-    echo
-    
-    display_prompt "Select option" ""
-    read -r choice
-    
-    case "$choice" in
-        1)
-            clear
-            if backup_all; then
-                display_success "Backup created successfully"
+    # Check if remnawave script is installed
+    if ! command -v remnawave >/dev/null 2>&1; then
+        display_warning "remnawave скрипт не установлен"
+        echo
+        display_info "Для управления резервными копиями необходимо установить remnawave"
+        display_info "В remnawave есть полное меню для работы с бэкапами"
+        echo
+        
+        if confirm_action "Установить remnawave сейчас?" "y"; then
+            if install_management_scripts "panel"; then
+                display_success "remnawave установлен"
+                echo
+                display_info "Открываем меню резервного копирования..."
+                sleep 2
+                remnawave schedule
+            else
+                display_error "Не удалось установить remnawave"
+                pause_for_user
+                return 1
             fi
-            ;;
-        2)
-            clear
-            list_backups
-            echo
-            display_prompt "Enter backup name to restore" ""
-            read -r backup_name
-            if [ -n "$backup_name" ]; then
-                restore_from_backup "$BACKUP_DIR/${backup_name}.tar.gz"
-            fi
-            ;;
-        3)
-            clear
-            list_backups
-            ;;
-        4)
-            clear
-            list_backups
-            echo
-            display_prompt "Enter backup name to delete" ""
-            read -r backup_name
-            if [ -n "$backup_name" ]; then
-                delete_backup "$backup_name"
-            fi
-            ;;
-        5)
-            clear
-            if confirm_action "Setup automatic daily backups?" "y"; then
-                setup_automatic_backup
-            fi
-            ;;
-        0)
-            return
-            ;;
-    esac
-    
-    echo
-    read -p "Press Enter to continue..."
+        else
+            display_info "Установка отменена"
+            display_info "Вы можете установить remnawave позже через:"
+            echo -e "  ${CYAN}bash install.sh → 10) Management Scripts${NC}"
+            pause_for_user
+            return 0
+        fi
+    else
+        # remnawave installed, use it for backup management
+        display_info "Используется remnawave для управления резервными копиями..."
+        echo
+        remnawave schedule
+    fi
 }
 
 menu_update() {
@@ -575,8 +537,36 @@ menu_update() {
     display_banner "$SCRIPT_VERSION"
     display_section "$ICON_DOWNLOAD" "Update Components"
     
-    display_warning "Feature coming soon!"
-    read -p "Press Enter to continue..."
+    # Check if remnawave script is installed
+    if ! command -v remnawave >/dev/null 2>&1; then
+        display_warning "remnawave скрипт не установлен"
+        echo
+        display_info "Для использования функции обновления необходимо установить remnawave"
+        echo
+        
+        if confirm_action "Установить remnawave сейчас?" "y"; then
+            if install_management_scripts "panel"; then
+                display_success "remnawave установлен"
+                echo
+                display_info "Запускаем обновление..."
+                sleep 2
+                remnawave update
+            else
+                display_error "Не удалось установить remnawave"
+                pause_for_user
+                return 1
+            fi
+        else
+            display_info "Установка отменена"
+            pause_for_user
+            return 0
+        fi
+    else
+        # remnawave installed, use it for updates
+        display_info "Используется remnawave для обновления..."
+        echo
+        remnawave update
+    fi
 }
 
 menu_status() {
@@ -600,18 +590,6 @@ menu_status() {
     fi
     
     echo
-    read -p "Press Enter to continue..."
-}
-
-menu_templates() {
-    clear
-    display_banner "$SCRIPT_VERSION"
-    display_section "$ICON_FILE" "SNI Templates"
-    
-    display_info "Manage HTML templates for Selfsteal"
-    echo
-    
-    display_warning "Feature coming soon!"
     read -p "Press Enter to continue..."
 }
 

@@ -249,11 +249,11 @@ install_panel() {
         fi
     fi
     
-    # Install management script
-    display_section "$ICON_TOOLS" "Установка управляющего скрипта"
-    if ! install_remnawave_script; then
-        display_warning "Управляющий скрипт не установлен"
-        display_info "Можно установить вручную позже"
+    # Install management scripts
+    display_section "$ICON_TOOLS" "Установка управляющих скриптов"
+    if ! install_management_scripts "panel"; then
+        display_warning "Управляющие скрипты не установлены"
+        display_info "Можно установить вручную: bash install.sh → Tools → Management Scripts"
     fi
     
     # Save installation info
