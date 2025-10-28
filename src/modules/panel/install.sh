@@ -62,7 +62,6 @@ install_panel() {
     display_success "Пароль администратора сгенерирован" >&2
     
     # Select reverse proxy
-    display_info "Выберите reverse proxy"
     local proxy_choice=$(select_from_list "Reverse Proxy" "Caddy (рекомендуется)" "NGINX")
     
     case "$proxy_choice" in
@@ -75,7 +74,6 @@ install_panel() {
     esac
     
     # Select security level
-    display_info "Выберите уровень безопасности"
     local security_choice=$(select_from_list "Уровень безопасности" \
         "Basic - Только домен" \
         "Cookie Auth - Cookie-based защита" \

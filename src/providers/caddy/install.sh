@@ -94,9 +94,6 @@ services:
       - CADDY_ADMIN=0.0.0.0:2019
     labels:
       - "remnawave.type=reverse-proxy"
-      - "remnawave.version=${SCRIPT_VERSION}"      - CADDY_ADMIN=0.0.0.0:2019
-    labels:
-      - "remnawave.type=reverse-proxy"
       - "remnawave.version=${SCRIPT_VERSION}"
 EOF
 }
