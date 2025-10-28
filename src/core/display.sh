@@ -97,7 +97,7 @@ display_separator() {
     if [ -n "$title" ]; then
         echo -e "${GRAY}   ${title}${NC}"
     fi
-    echo -e "${GRAY}   $(printf '─%.0s' $(seq 1 width))${NC}"
+    echo -e "${GRAY}   $(printf '─%.0s' $(seq 1 $width))${NC}"
 }
 
 display_list_item() {

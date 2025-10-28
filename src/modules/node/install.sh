@@ -352,15 +352,35 @@ validate_system_for_node() {
         return 1
     fi
     
+    # Check and install Docker if needed
     if ! validate_docker; then
-        display_error "Docker не установлен"
-        display_info "Установите Docker: https://docs.docker.com/engine/install/"
-        return 1
+        display_warning "Docker не установлен"
+        echo
+        if confirm_action "Установить Docker автоматически?" "y"; then
+            if ! install_docker; then
+                display_error "Не удалось установить Docker"
+                return 1
+            fi
+        else
+            display_error "Docker обязателен для установки"
+            display_info "Установите Docker: https://docs.docker.com/engine/install/"
+            return 1
+        fi
     fi
     
+    # Check and install Docker Compose if needed
     if ! validate_docker_compose; then
-        display_error "Docker Compose не установлен"
-        return 1
+        display_warning "Docker Compose V2 не установлен"
+        echo
+        if confirm_action "Установить Docker Compose автоматически?" "y"; then
+            if ! install_docker_compose; then
+                display_error "Не удалось установить Docker Compose"
+                return 1
+            fi
+        else
+            display_error "Docker Compose обязателен для установки"
+            return 1
+        fi
     fi
     
     # Check required ports

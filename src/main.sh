@@ -37,41 +37,43 @@ show_main_menu() {
         
         # Show current status if installed
         if load_install_info; then
-            echo -e "${WHITE}📊 Current Installation:${NC}"
-            display_separator "" 40
-            display_table_row "Type" "$CURRENT_INSTALL_TYPE" 20
+            echo -e "${WHITE}📊 Текущая установка:${NC}"
+            display_separator "" 50
+            display_table_row "Тип" "$CURRENT_INSTALL_TYPE" 20
             display_table_row "Reverse Proxy" "$CURRENT_REVERSE_PROXY" 20
-            display_table_row "Domain" "$CURRENT_DOMAIN" 20
+            display_table_row "Домен" "$CURRENT_DOMAIN" 20
+            echo
+        else
+            # Show default settings if not installed
+            echo -e "${WHITE}⚙️  Настройки по умолчанию:${NC}"
+            display_separator "" 50
+            display_table_row "Reverse Proxy" "${CURRENT_REVERSE_PROXY:-Caddy (рекомендуется)}" 25
+            display_table_row "Безопасность" "${CURRENT_SECURITY_LEVEL:-Cookie Auth}" 25
+            display_table_row "SSL" "Let's Encrypt (auto)" 25
+            echo -e "${GRAY}   (Настройки можно изменить во время установки)${NC}"
             echo
         fi
         
-        echo -e "${WHITE}   📦 Installation Options:${NC}"
-        display_separator "" 40
-        display_menu_item "1" "Panel Only" "Install Remnawave Panel"
-        display_menu_item "2" "Node Only" "Install Remnawave Node"
-        display_menu_item "3" "All-in-One" "Install Panel + Node"
-        display_menu_item "4" "Selfsteal Only" "Install Caddy Selfsteal"
+        echo -e "${WHITE}   � Установка:${NC}"
+        display_separator "" 50
+        display_menu_item "1" "Panel Only" "Установить только Remnawave Panel"
+        display_menu_item "2" "Node Only" "Установить только Remnawave Node"
+        display_menu_item "3" "All-in-One" "Установить Panel + Node (под ключ)"
+        display_menu_item "4" "Selfsteal Only" "Установить только Caddy Selfsteal"
         echo
         
-        echo -e "${WHITE}   🔧 Configuration:${NC}"
-        display_separator "" 40
-        display_menu_item "5" "Reverse Proxy" "Choose NGINX or Caddy"
-        display_menu_item "6" "Security Level" "Basic / Cookie / 2FA"
-        display_menu_item "7" "SSL Provider" "Let's Encrypt / Cloudflare / CertWarden"
+        echo -e "${WHITE}   🔌 Интеграции:${NC}"
+        display_separator "" 50
+        display_menu_item "5" "WARP" "Cloudflare WARP integration"
+        display_menu_item "6" "VPN Setup" "Netbird VPN mesh network"
         echo
         
-        echo -e "${WHITE}   🔌 Integrations:${NC}"
-        display_separator "" 40
-        display_menu_item "8" "WARP" "Cloudflare WARP integration"
-        display_menu_item "9" "VPN Setup" "Netbird integration"
-        echo
-        
-        echo -e "${WHITE}   🛠️  Tools:${NC}"
-        display_separator "" 40
-        display_menu_item "10" "Management Scripts" "Install remnawave/remnanode/selfsteal"
-        display_menu_item "11" "Backup & Restore" "Manage backups"
-        display_menu_item "12" "Update" "Update components"
-        display_menu_item "13" "Status" "View system status"
+        echo -e "${WHITE}   🛠️  Инструменты:${NC}"
+        display_separator "" 50
+        display_menu_item "7" "Management Scripts" "Установить управляющие скрипты"
+        display_menu_item "8" "Backup & Restore" "Управление резервными копиями"
+        display_menu_item "9" "Update" "Обновить компоненты"
+        display_menu_item "10" "Status" "Показать статус системы"
         echo
         
         display_menu_item "0" "Exit" ""
@@ -79,7 +81,7 @@ show_main_menu() {
         display_divider "─" 60
         echo
         
-        display_prompt "Select option" ""
+        display_prompt "Выберите опцию" ""
         read -r choice
         
         case "$choice" in
@@ -87,23 +89,20 @@ show_main_menu() {
             2) menu_install_node ;;
             3) menu_install_all_in_one ;;
             4) menu_install_selfsteal ;;
-            5) menu_configure_proxy ;;
-            6) choose_security_level ;;
-            7) configure_ssl ;;
-            8) menu_integration_warp ;;
-            9) menu_integration_vpn ;;
-            10) menu_management_scripts ;;
-            11) menu_backup_restore ;;
-            12) menu_update ;;
-            13) menu_status ;;
+            5) menu_integration_warp ;;
+            6) menu_integration_vpn ;;
+            7) menu_management_scripts ;;
+            8) menu_backup_restore ;;
+            9) menu_update ;;
+            10) menu_status ;;
             0) 
                 echo
-                display_info "Thank you for using Remnawave Ultimate Installer!"
+                display_info "Спасибо за использование Remnawave Ultimate Installer!"
                 echo
                 exit 0
                 ;;
             *)
-                display_error "Invalid option"
+                display_error "Неверная опция"
                 sleep 1
                 ;;
         esac
