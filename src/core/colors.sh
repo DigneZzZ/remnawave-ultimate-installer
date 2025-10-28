@@ -4,74 +4,74 @@
 
 # Prevent double loading
 [[ -n "${COLORS_LOADED}" ]] && return 0
-readonly COLORS_LOADED=1
+export COLORS_LOADED=1
 
 # Basic colors
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly YELLOW='\033[1;33m'
-readonly BLUE='\033[0;34m'
-readonly PURPLE='\033[0;35m'
-readonly CYAN='\033[0;36m'
-readonly WHITE='\033[1;37m'
-readonly GRAY='\033[0;37m'
-readonly NC='\033[0m'
+export RED='\033[0;31m'
+export GREEN='\033[0;32m'
+export YELLOW='\033[1;33m'
+export BLUE='\033[0;34m'
+export PURPLE='\033[0;35m'
+export CYAN='\033[0;36m'
+export WHITE='\033[1;37m'
+export GRAY='\033[0;37m'
+export NC='\033[0m'
 
 # Extended colors
-readonly LIGHT_RED='\033[1;31m'
-readonly LIGHT_GREEN='\033[1;32m'
-readonly LIGHT_BLUE='\033[1;34m'
-readonly LIGHT_PURPLE='\033[1;35m'
-readonly LIGHT_CYAN='\033[1;36m'
+export LIGHT_RED='\033[1;31m'
+export LIGHT_GREEN='\033[1;32m'
+export LIGHT_BLUE='\033[1;34m'
+export LIGHT_PURPLE='\033[1;35m'
+export LIGHT_CYAN='\033[1;36m'
 
 # Background colors
-readonly BG_RED='\033[41m'
-readonly BG_GREEN='\033[42m'
-readonly BG_YELLOW='\033[43m'
-readonly BG_BLUE='\033[44m'
-readonly BG_WHITE='\033[47m'
+export BG_RED='\033[41m'
+export BG_GREEN='\033[42m'
+export BG_YELLOW='\033[43m'
+export BG_BLUE='\033[44m'
+export BG_WHITE='\033[47m'
 
 # Text styles
-readonly BOLD='\033[1m'
-readonly DIM='\033[2m'
-readonly UNDERLINE='\033[4m'
-readonly BLINK='\033[5m'
-readonly REVERSE='\033[7m'
+export BOLD='\033[1m'
+export DIM='\033[2m'
+export UNDERLINE='\033[4m'
+export BLINK='\033[5m'
+export REVERSE='\033[7m'
 
 # Icons with colors
-readonly ICON_SUCCESS="${GREEN}✅${NC}"
-readonly ICON_ERROR="${RED}❌${NC}"
-readonly ICON_WARNING="${YELLOW}⚠️${NC}"
-readonly ICON_INFO="${BLUE}ℹ️${NC}"
-readonly ICON_ROCKET="${CYAN}🚀${NC}"
-readonly ICON_GEAR="${WHITE}⚙️${NC}"
-readonly ICON_CHECK="${GREEN}✓${NC}"
-readonly ICON_CROSS="${RED}✗${NC}"
-readonly ICON_ARROW="${CYAN}→${NC}"
-readonly ICON_STAR="${YELLOW}★${NC}"
-readonly ICON_FOLDER="${BLUE}📁${NC}"
-readonly ICON_FILE="${GRAY}📄${NC}"
-readonly ICON_DOWNLOAD="${CYAN}📥${NC}"
-readonly ICON_UPLOAD="${CYAN}📤${NC}"
-readonly ICON_LOCK="${YELLOW}🔒${NC}"
-readonly ICON_UNLOCK="${GREEN}🔓${NC}"
-readonly ICON_KEY="${YELLOW}🔑${NC}"
-readonly ICON_SEARCH="${WHITE}🔍${NC}"
-readonly ICON_PACKAGE="${PURPLE}📦${NC}"
-readonly ICON_PLUG="${BLUE}🔌${NC}"
-readonly ICON_TOOL="${GRAY}🛠️${NC}"
-readonly ICON_CHART="${GREEN}📊${NC}"
-readonly ICON_GLOBE="${BLUE}🌐${NC}"
-readonly ICON_SERVER="${PURPLE}🖥️${NC}"
-readonly ICON_NETWORK="${CYAN}🌍${NC}"
-readonly ICON_SHIELD="${YELLOW}🛡️${NC}"
-readonly ICON_FIRE="${RED}🔥${NC}"
-readonly ICON_LIGHTNING="${YELLOW}⚡${NC}"
-readonly ICON_CLOCK="${GRAY}🕐${NC}"
-readonly ICON_PARTY="${GREEN}🎉${NC}"
-readonly ICON_THINKING="${BLUE}🤔${NC}"
-readonly ICON_WRITING="${WHITE}📝${NC}"
-readonly ICON_BOOK="${CYAN}📚${NC}"
+export ICON_SUCCESS="${GREEN}✅${NC}"
+export ICON_ERROR="${RED}❌${NC}"
+export ICON_WARNING="${YELLOW}⚠️${NC}"
+export ICON_INFO="${BLUE}ℹ️${NC}"
+export ICON_ROCKET="${CYAN}🚀${NC}"
+export ICON_GEAR="${WHITE}⚙️${NC}"
+export ICON_CHECK="${GREEN}✓${NC}"
+export ICON_CROSS="${RED}✗${NC}"
+export ICON_ARROW="${CYAN}→${NC}"
+export ICON_STAR="${YELLOW}★${NC}"
+export ICON_FOLDER="${BLUE}📁${NC}"
+export ICON_FILE="${GRAY}📄${NC}"
+export ICON_DOWNLOAD="${CYAN}📥${NC}"
+export ICON_UPLOAD="${CYAN}📤${NC}"
+export ICON_LOCK="${YELLOW}🔒${NC}"
+export ICON_UNLOCK="${GREEN}🔓${NC}"
+export ICON_KEY="${YELLOW}🔑${NC}"
+export ICON_SEARCH="${WHITE}🔍${NC}"
+export ICON_PACKAGE="${PURPLE}📦${NC}"
+export ICON_PLUG="${BLUE}🔌${NC}"
+export ICON_TOOL="${GRAY}🛠️${NC}"
+export ICON_CHART="${GREEN}📊${NC}"
+export ICON_GLOBE="${BLUE}🌐${NC}"
+export ICON_SERVER="${PURPLE}🖥️${NC}"
+export ICON_NETWORK="${CYAN}🌍${NC}"
+export ICON_SHIELD="${YELLOW}🛡️${NC}"
+export ICON_FIRE="${RED}🔥${NC}"
+export ICON_LIGHTNING="${YELLOW}⚡${NC}"
+export ICON_CLOCK="${GRAY}🕐${NC}"
+export ICON_PARTY="${GREEN}🎉${NC}"
+export ICON_THINKING="${BLUE}🤔${NC}"
+export ICON_WRITING="${WHITE}📝${NC}"
+export ICON_BOOK="${CYAN}📚${NC}"
 
 # Function to test if terminal supports colors
 colors_supported() {
