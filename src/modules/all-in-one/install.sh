@@ -518,7 +518,7 @@ validate_system_for_all_in_one() {
     fi
     
     # Check and install Docker if needed
-    if ! validate_docker; then
+    if ! check_docker; then
         display_warning "Docker не установлен"
         echo
         if confirm_action "Установить Docker автоматически?" "y"; then
@@ -530,10 +530,13 @@ validate_system_for_all_in_one() {
             display_error "Docker обязателен для установки"
             return 1
         fi
+    else
+        local docker_version=$(docker --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -1)
+        display_success "Docker установлен: $docker_version"
     fi
     
     # Check and install Docker Compose if needed
-    if ! validate_docker_compose; then
+    if ! check_docker_compose; then
         display_warning "Docker Compose V2 не установлен"
         echo
         if confirm_action "Установить Docker Compose автоматически?" "y"; then
@@ -545,6 +548,9 @@ validate_system_for_all_in_one() {
             display_error "Docker Compose обязателен для установки"
             return 1
         fi
+    else
+        local compose_version=$(docker compose version --short 2>/dev/null)
+        display_success "Docker Compose V2: $compose_version"
     fi
     
     # Check disk space

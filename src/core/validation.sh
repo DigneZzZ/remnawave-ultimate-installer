@@ -95,6 +95,15 @@ validate_docker_compose() {
     return 0
 }
 
+# Silent versions (no output)
+check_docker() {
+    command -v docker >/dev/null 2>&1
+}
+
+check_docker_compose() {
+    docker compose version >/dev/null 2>&1
+}
+
 validate_curl() {
     if ! command -v curl >/dev/null 2>&1; then
         display_error "curl is not installed"
