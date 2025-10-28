@@ -6,6 +6,7 @@
 
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../../config.sh"
 source "$SCRIPT_DIR/../../lib/api.sh"
 source "$SCRIPT_DIR/../../lib/panel-api.sh"
 source "$SCRIPT_DIR/../../lib/user-api.sh"
@@ -36,7 +37,44 @@ auto_configure_all_in_one() {
     
     sleep 3
     
-    # Step 1: Generate x25519 keys
+    # Step 1: Get SECRET_KEY from Panel API
+    display_step "Получение SECRET_KEY для Node..."
+    local secret_key=$(api_get_node_secret_key "$panel_url" "$admin_token" "$domain")
+    if [ $? -ne 0 ] || [ -z "$secret_key" ]; then
+        display_error "Не удалось получить SECRET_KEY из панели"
+        return 1
+    fi
+    
+    display_success "SECRET_KEY получен: ${secret_key:0:16}..."
+    
+    # Step 2: Update Node .env with SECRET_KEY
+    display_step "Обновление конфигурации Node..."
+    local node_env_file="$NODE_DIR/.env"
+    
+    if [ ! -f "$node_env_file" ]; then
+        display_error "Файл Node .env не найден: $node_env_file"
+        return 1
+    fi
+    
+    # Add or update SECRET_KEY in .env
+    if grep -q "^SECRET_KEY=" "$node_env_file"; then
+        sed -i "s|^SECRET_KEY=.*|SECRET_KEY=$secret_key|" "$node_env_file"
+    else
+        echo "SECRET_KEY=$secret_key" >> "$node_env_file"
+    fi
+    
+    display_success "Node конфигурация обновлена"
+    
+    # Step 3: Restart Node container to apply new SECRET_KEY
+    display_step "Перезапуск Node контейнера..."
+    if docker compose -f "$NODE_DIR/docker-compose.yml" restart remnawave-node >/dev/null 2>&1; then
+        display_success "Node контейнер перезапущен"
+        sleep 3
+    else
+        display_warning "Не удалось перезапустить Node контейнер"
+    fi
+    
+    # Step 4: Generate x25519 keys
     display_step "Генерация ключей..."
     local keys=$(api_generate_x25519_keys "$panel_url" "$admin_token" "$domain")
     if [ $? -ne 0 ] || [ -z "$keys" ]; then
@@ -50,7 +88,7 @@ auto_configure_all_in_one() {
     display_success "Ключи сгенерированы"
     display_info "Public Key: $public_key"
     
-    # Step 2: Generate Xray Reality config
+    # Step 5: Generate Xray Reality config
     display_step "Генерация Xray конфигурации..."
     local caddy_port="${DEFAULT_CADDY_LOCAL_PORT}"
     local xray_config=$(generate_xray_reality_config "$selfsteal_domain" "$caddy_port" "$private_key")
@@ -60,7 +98,7 @@ auto_configure_all_in_one() {
         return 1
     fi
     
-    # Step 3: Delete default config profile if exists
+    # Step 6: Delete default config profile if exists
     local profiles_response=$(api_get_config_profiles "$panel_url" "$admin_token" "$domain")
     if [ $? -eq 0 ] && [ -n "$profiles_response" ]; then
         local default_profile=$(echo "$profiles_response" | jq -r '.response.configProfiles[0].uuid // empty' 2>/dev/null)
@@ -70,7 +108,7 @@ auto_configure_all_in_one() {
         fi
     fi
     
-    # Step 4: Create config profile
+    # Step 7: Create config profile
     local profile_result=$(api_create_config_profile "$panel_url" "$admin_token" "$domain" \
         "VLESS Reality" "$xray_config")
     
@@ -86,19 +124,19 @@ auto_configure_all_in_one() {
     display_info "Profile UUID: $profile_uuid"
     display_info "Inbound UUID: $inbound_uuid"
     
-    # Step 5: Create local node entry
+    # Step 8: Create local node entry
     if ! api_create_node "$panel_url" "$admin_token" "$domain" \
         "Local-Node" "$node_address" "$node_port" "$profile_uuid" "$inbound_uuid"; then
         display_warning "Не удалось создать node"
     fi
     
-    # Step 6: Create host entry for selfsteal domain
+    # Step 9: Create host entry for selfsteal domain
     if ! api_create_host "$panel_url" "$admin_token" "$domain" \
         "$profile_uuid" "$inbound_uuid" "$selfsteal_domain" 443 "VLESS"; then
         display_warning "Не удалось создать host"
     fi
     
-    # Step 7: Get squads and update
+    # Step 10: Get squads and update
     local squads_response=$(api_get_squads "$panel_url" "$admin_token" "$domain")
     if [ $? -eq 0 ] && [ -n "$squads_response" ]; then
         local squad_uuid=$(echo "$squads_response" | jq -r '.response.internalSquads[0].uuid // empty' 2>/dev/null)
@@ -111,7 +149,7 @@ auto_configure_all_in_one() {
                 display_warning "Не удалось обновить squad"
             fi
             
-            # Step 8: Create default user
+            # Step 11: Create default user
             display_step "Создание пользователя 'remnawave'..."
             if api_create_user "$panel_url" "$admin_token" "$domain" \
                 "remnawave" "$inbound_uuid" "$squad_uuid"; then
@@ -151,6 +189,9 @@ Shadowsocks Password: ${USER_SS_PASSWORD}
 Public Key: ${public_key}
 Selfsteal Domain: ${selfsteal_domain}
 Node Address: ${node_address}:${node_port}
+
+=== Node Configuration ===
+SECRET_KEY: ${secret_key}
 
 === Panel Access ===
 Panel Domain: ${domain}

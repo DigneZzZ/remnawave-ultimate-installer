@@ -342,7 +342,7 @@ services:
     command:
       - valkey-server
       - --requirepass
-      - ${redis_password}
+      - "${redis_password}"
       - --maxmemory
       - 256mb
       - --maxmemory-policy
@@ -383,6 +383,7 @@ API_PORT=3000
 DOMAIN=$domain
 
 # Database
+DATABASE_URL=postgresql://$DEFAULT_DB_USER:$db_password@postgres:5432/$DEFAULT_DB_NAME?schema=public
 DB_HOST=postgres
 DB_PORT=5432
 DB_NAME=$DEFAULT_DB_NAME

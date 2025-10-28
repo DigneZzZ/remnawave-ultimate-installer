@@ -393,7 +393,7 @@ services:
     command:
       - valkey-server
       - --requirepass
-      - ${redis_password}
+      - "${redis_password}"
       - --maxmemory
       - 256mb
       - --maxmemory-policy
@@ -432,6 +432,7 @@ EOF
 
 generate_node_env_local() {
     local node_token="$1"
+    local secret_key="${2:-}"  # Optional, will be fetched from Panel API later
     
     cat > "$NODE_DIR/.env" <<EOF
 # Remnawave Node Configuration (All-in-One)
@@ -441,6 +442,14 @@ APP_PORT=2222
 NODE_ENV=production
 PANEL_IP=127.0.0.1
 NODE_TOKEN=$node_token
+EOF
+
+    # Add SECRET_KEY only if provided (will be added later via API)
+    if [ -n "$secret_key" ]; then
+        echo "SECRET_KEY=$secret_key" >> "$NODE_DIR/.env"
+    fi
+    
+    cat >> "$NODE_DIR/.env" <<EOF
 
 LOG_LEVEL=info
 LOG_FILE=/app/logs/remnanode.log

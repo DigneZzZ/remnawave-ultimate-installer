@@ -331,6 +331,59 @@ api_generate_x25519_keys() {
 }
 
 # =============================================================================
+# NODE SECRET KEY FUNCTIONS
+# =============================================================================
+
+# Get SECRET_KEY from Panel API for Node authentication
+# Args: $1=panel_url, $2=token, $3=domain
+api_get_node_secret_key() {
+    local panel_url="$1"
+    local token="$2"
+    local domain="$3"
+    
+    display_step "Получение SECRET_KEY из панели..."
+    
+    # Try multiple possible endpoints
+    local endpoints=(
+        "/api/nodes/secret-key"
+        "/api/system/secret-key"
+        "/api/system/node-secret"
+        "/api/admin/secret-key"
+    )
+    
+    for endpoint in "${endpoints[@]}"; do
+        local response=$(make_api_request "GET" \
+            "http://${panel_url}${endpoint}" \
+            "$token" "$domain" "")
+        
+        # Check if response has secretKey field
+        if echo "$response" | jq -e '.response.secretKey' >/dev/null 2>&1; then
+            local secret_key=$(echo "$response" | jq -r '.response.secretKey')
+            
+            if [ -n "$secret_key" ] && [ "$secret_key" != "null" ]; then
+                display_success "SECRET_KEY получен"
+                echo "$secret_key"
+                return 0
+            fi
+        fi
+        
+        # Try alternative field names
+        if echo "$response" | jq -e '.response.secret' >/dev/null 2>&1; then
+            local secret_key=$(echo "$response" | jq -r '.response.secret')
+            
+            if [ -n "$secret_key" ] && [ "$secret_key" != "null" ]; then
+                display_success "SECRET_KEY получен"
+                echo "$secret_key"
+                return 0
+            fi
+        fi
+    done
+    
+    display_error "Не удалось получить SECRET_KEY ни из одного endpoint"
+    return 1
+}
+
+# =============================================================================
 # EXPORT FUNCTIONS
 # =============================================================================
 
@@ -343,3 +396,4 @@ export -f api_create_host
 export -f api_get_squads
 export -f api_update_squad_inbounds
 export -f api_generate_x25519_keys
+export -f api_get_node_secret_key
