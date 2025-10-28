@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-#!/usr/bin/env bash
 # Cryptographic Utilities Library
 # Advanced crypto generation for Remnawave infrastructure
 # Author: DigneZzZ
+
+# Prevent double loading
+[[ -n "${CRYPTO_LOADED}" ]] && return 0
+readonly CRYPTO_LOADED=1
 
 source "$(dirname "${BASH_SOURCE[0]}")/../core/colors.sh"
 
