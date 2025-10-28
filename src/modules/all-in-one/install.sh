@@ -54,7 +54,8 @@ install_all_in_one() {
     # Use latest Docker image by default
     DOCKER_IMAGE_TAG="latest"
     
-    local domain=$(read_domain "Введите домен")
+    echo
+    local domain=$(read_domain "Введите домен для панели")
     local selfsteal_domain=$(read_domain "Введите selfsteal домен (для VLESS)")
     local admin_email=$(read_email "Введите email администратора")
     local admin_password=$(read_password_with_strength "Создайте пароль администратора" "true")

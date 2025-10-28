@@ -114,12 +114,10 @@ show_main_menu() {
 # =============================================================================
 
 menu_install_panel() {
-    clear
-    display_banner "$SCRIPT_VERSION"
-    display_section "$ICON_PACKAGE" "Panel Installation"
-    
     # Check if already installed
     if is_installed "panel"; then
+        clear
+        display_banner "$SCRIPT_VERSION"
         display_warning "Panel is already installed"
         echo
         display_confirm "Reinstall" "n"
@@ -127,33 +125,12 @@ menu_install_panel() {
         [[ ! $confirm =~ ^[Yy]$ ]] && return
     fi
     
-    # Pre-flight checks
-    display_step "Running pre-flight checks..."
-    echo
-    
-    if ! validate_root; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    # Choose reverse proxy
-    choose_reverse_proxy
-    
-    # Choose security level
-    choose_security_level
-    
-    # Domain configuration
-    configure_domain
-    
-    # SSL configuration
-    configure_ssl
-    
-    # Run installation
-    echo
-    
+    # Run installation (all configuration is inside install_panel)
     if install_panel; then
+        echo
         display_success "Panel installation completed successfully!"
     else
+        echo
         display_error "Panel installation failed"
     fi
     
@@ -162,12 +139,10 @@ menu_install_panel() {
 }
 
 menu_install_node() {
-    clear
-    display_banner "$SCRIPT_VERSION"
-    display_section "$ICON_SERVER" "Node Installation"
-    
     # Check if already installed
     if is_installed "node"; then
+        clear
+        display_banner "$SCRIPT_VERSION"
         display_warning "Node is already installed"
         echo
         display_confirm "Reinstall" "n"
@@ -175,34 +150,12 @@ menu_install_node() {
         [[ ! $confirm =~ ^[Yy]$ ]] && return
     fi
     
-    # Pre-flight checks
-    display_step "Running pre-flight checks..."
-    echo
-    
-    if ! validate_root; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    # Ask for Xray integration
-    echo
-    display_prompt "Install Xray-core" "yes"
-    read -r install_xray
-    [[ $install_xray =~ ^[Yy]|yes$ ]] && ENABLE_XRAY=true
-    
-    # Ask for Selfsteal
-    if [ "$ENABLE_XRAY" = true ]; then
-        display_prompt "Install Selfsteal (Caddy)" "yes"
-        read -r install_selfsteal
-        [[ $install_selfsteal =~ ^[Yy]|yes$ ]] && ENABLE_SELFSTEAL=true
-    fi
-    
-    # Run installation
-    echo
-    
+    # Run installation (all configuration is inside install_node)
     if install_node; then
+        echo
         display_success "Node installation completed successfully!"
     else
+        echo
         display_error "Node installation failed"
     fi
     
@@ -211,43 +164,12 @@ menu_install_node() {
 }
 
 menu_install_all_in_one() {
-    clear
-    display_banner "$SCRIPT_VERSION"
-    display_section "$ICON_ROCKET" "All-in-One Installation"
-    
-    display_info "This will install both Panel and Node on the same server"
-    echo
-    
-    # Pre-flight checks
-    if ! validate_root; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    # Choose reverse proxy
-    choose_reverse_proxy
-    
-    # Choose security level
-    choose_security_level
-    
-    # Domain configuration
-    configure_domain
-    
-    # SSL configuration
-    configure_ssl
-    
-    # Xray options
-    ENABLE_XRAY=true
-    display_prompt "Install Selfsteal (Caddy)" "yes"
-    read -r install_selfsteal
-    [[ $install_selfsteal =~ ^[Yy]|yes$ ]] && ENABLE_SELFSTEAL=true
-    
-    # Run installation
-    echo
-    
+    # Run installation (all configuration is inside install_all_in_one)
     if install_all_in_one; then
+        echo
         display_success "All-in-One installation completed successfully!"
     else
+        echo
         display_error "All-in-One installation failed"
     fi
     
