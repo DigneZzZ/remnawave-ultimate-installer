@@ -1,0 +1,53 @@
+{
+    admin off
+    email {$ADMIN_EMAIL}
+}
+
+{$DOMAIN} {
+    # HTTP Basic Authentication (2FA equivalent)
+    basicauth {
+        {$AUTH_USERNAME} {$AUTH_PASSWORD_HASH}
+    }
+    
+    reverse_proxy {$BACKEND_URL} {
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up Host {host}
+        header_up X-Authenticated-User {http.auth.user.id}
+    }
+    
+    encode gzip
+    
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100mb
+            roll_keep 10
+        }
+        format json
+    }
+}
+
+# Static selfsteal domain (optional, no auth)
+https://{$SELFSTEAL_DOMAIN} {
+    root * /var/www/html
+    try_files {path} /index.html
+    file_server
+    
+    encode gzip
+    
+    log {
+        output file /var/log/caddy/selfsteal.log
+        format json
+    }
+}
+
+# HTTP redirects
+http://{$DOMAIN}, http://{$SELFSTEAL_DOMAIN} {
+    redir https://{host}{uri} permanent
+}
+
+# Health check endpoint
+:2019 {
+    respond /health 200
+}

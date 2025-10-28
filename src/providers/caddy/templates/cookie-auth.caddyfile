@@ -1,0 +1,71 @@
+{
+    admin off
+    email {$ADMIN_EMAIL}
+}
+
+{$DOMAIN} {
+    # Set cookie when secret parameter is present
+    @has_token_param {
+        query caddy={$SECRET_KEY}
+    }
+    
+    handle @has_token_param {
+        header +Set-Cookie "caddy={$SECRET_KEY}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000"
+        redir / 302
+    }
+    
+    # Block unauthorized access or show static site
+    @unauthorized {
+        not header Cookie *caddy={$SECRET_KEY}*
+        not query caddy={$SECRET_KEY}
+    }
+    
+    handle @unauthorized {
+        # Show static site (selfsteal)
+        root * /var/www/html
+        try_files {path} /index.html
+        file_server
+    }
+    
+    # Authorized users - reverse proxy to backend
+    reverse_proxy {$BACKEND_URL} {
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up Host {host}
+    }
+    
+    encode gzip
+    
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100mb
+            roll_keep 10
+        }
+        format json
+    }
+}
+
+# Static selfsteal domain
+https://{$SELFSTEAL_DOMAIN} {
+    root * /var/www/html
+    try_files {path} /index.html
+    file_server
+    
+    encode gzip
+    
+    log {
+        output file /var/log/caddy/selfsteal.log
+        format json
+    }
+}
+
+# HTTP redirects
+http://{$DOMAIN}, http://{$SELFSTEAL_DOMAIN} {
+    redir https://{host}{uri} permanent
+}
+
+# Health check endpoint
+:2019 {
+    respond /health 200
+}

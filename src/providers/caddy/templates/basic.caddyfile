@@ -1,0 +1,33 @@
+{
+    admin off
+    email {$ADMIN_EMAIL}
+}
+
+{$DOMAIN} {
+    reverse_proxy {$BACKEND_URL} {
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up Host {host}
+    }
+    
+    encode gzip
+    
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100mb
+            roll_keep 10
+        }
+        format json
+    }
+}
+
+# HTTP redirect
+http://{$DOMAIN} {
+    redir https://{host}{uri} permanent
+}
+
+# Health check endpoint
+:2019 {
+    respond /health 200
+}
