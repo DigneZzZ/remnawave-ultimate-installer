@@ -141,22 +141,22 @@ read_password_with_strength() {
     local password=""
     
     while true; do
-        display_prompt "$prompt" ""
+        display_prompt "$prompt" "" >&2
         read -r -s -p "> " password
-        echo
+        echo >&2
         
         if ! validate_password_strength "$password"; then
-            display_error "Пароль должен содержать минимум 8 символов, заглавные и строчные буквы, цифры"
+            display_error "Пароль должен содержать минимум 8 символов, заглавные и строчные буквы, цифры" >&2
             continue
         fi
         
         if [ "$confirm" = "true" ]; then
-            display_prompt "Подтвердите пароль" ""
+            display_prompt "Подтвердите пароль" "" >&2
             read -r -s -p "> " password_confirm
-            echo
+            echo >&2
             
             if [ "$password" != "$password_confirm" ]; then
-                display_error "Пароли не совпадают"
+                display_error "Пароли не совпадают" >&2
                 continue
             fi
         fi
@@ -390,11 +390,11 @@ read_email() {
     local email=""
     
     while true; do
-        display_prompt "$prompt" ""
+        display_prompt "$prompt" "" >&2
         read -r -p "> " email
         
         if [ -z "$email" ]; then
-            display_error "Email не может быть пустым"
+            display_error "Email не может быть пустым" >&2
             continue
         fi
         
@@ -402,7 +402,7 @@ read_email() {
             echo "$email"
             return 0
         else
-            display_error "Неверный формат email"
+            display_error "Неверный формат email" >&2
         fi
     done
 }
