@@ -3,6 +3,10 @@
 # Simplified Docker installation using official get.docker.com script
 # Author: DigneZzZ
 
+# Prevent double loading
+[[ -n "${DOCKER_LOADED}" ]] && return 0
+readonly DOCKER_LOADED=1
+
 source "$(dirname "${BASH_SOURCE[0]}")/../core/colors.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../core/display.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/logging.sh"

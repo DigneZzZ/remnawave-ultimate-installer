@@ -4,6 +4,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${API_LOADED}" ]] && return 0
+readonly API_LOADED=1
+
 # =============================================================================
 # HTTP REQUEST FUNCTIONS
 # =============================================================================

@@ -4,6 +4,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${BACKUP_LOADED}" ]] && return 0
+readonly BACKUP_LOADED=1
+
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../config.sh"

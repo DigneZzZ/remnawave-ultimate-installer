@@ -4,6 +4,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${HTTP_LOADED}" ]] && return 0
+readonly HTTP_LOADED=1
+
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../core/display.sh"

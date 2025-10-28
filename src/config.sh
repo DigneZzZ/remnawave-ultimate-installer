@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Global Configuration for Remnawave Ultimate Installer
 
+# Prevent double loading
+[[ -n "${CONFIG_LOADED}" ]] && return 0
+readonly CONFIG_LOADED=1
+
 # =============================================================================
 # VERSION INFORMATION
 # =============================================================================

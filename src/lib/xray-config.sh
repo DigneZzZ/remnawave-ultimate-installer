@@ -4,6 +4,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${XRAY_CONFIG_LOADED}" ]] && return 0
+readonly XRAY_CONFIG_LOADED=1
+
 # =============================================================================
 # XRAY REALITY CONFIGURATION
 # =============================================================================

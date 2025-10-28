@@ -4,6 +4,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${USER_API_LOADED}" ]] && return 0
+readonly USER_API_LOADED=1
+
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/api.sh"

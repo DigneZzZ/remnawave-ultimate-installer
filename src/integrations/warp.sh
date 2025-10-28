@@ -4,6 +4,10 @@
 # Based on: https://github.com/xxphantom/docker-warp-native
 # Author: DigneZzZ
 
+# Prevent double loading
+[[ -n "${WARP_LOADED}" ]] && return 0
+readonly WARP_LOADED=1
+
 source "$(dirname "${BASH_SOURCE[0]}")/../core/colors.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../core/display.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../lib/logging.sh"

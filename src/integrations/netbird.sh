@@ -4,6 +4,10 @@
 # Based on: https://www.netbird.io/
 # Author: DigneZzZ
 
+# Prevent double loading
+[[ -n "${NETBIRD_LOADED}" ]] && return 0
+readonly NETBIRD_LOADED=1
+
 source "$(dirname "${BASH_SOURCE[0]}")/../core/colors.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../core/display.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../lib/logging.sh"
