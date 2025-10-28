@@ -5,6 +5,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${CADDY_INSTALL_LOADED}" ]] && return 0
+readonly CADDY_INSTALL_LOADED=1
+
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../config.sh"
@@ -307,7 +311,6 @@ get_caddy_version() {
 
 export -f install_caddy
 export -f generate_caddy_compose
-export -f generate_caddy_compose_host_mode
 export -f generate_basic_caddyfile
 export -f start_caddy
 export -f stop_caddy
