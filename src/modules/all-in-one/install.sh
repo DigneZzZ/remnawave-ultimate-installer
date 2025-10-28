@@ -390,11 +390,14 @@ services:
     image: ${REDIS_IMAGE}
     container_name: ${REDIS_CONTAINER}
     restart: unless-stopped
-    command: >
-      valkey-server
-      --requirepass ${redis_password}
-      --maxmemory 256mb
-      --maxmemory-policy allkeys-lru
+    command:
+      - valkey-server
+      - --requirepass
+      - ${redis_password}
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
     volumes:
       - ${BASE_DIR}/redis/data:/data
     networks:

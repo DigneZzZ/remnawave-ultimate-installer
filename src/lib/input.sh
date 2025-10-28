@@ -26,11 +26,11 @@ read_input() {
     while true; do
         # Show prompt
         if [ -n "$default" ]; then
-            display_prompt "$prompt" "$default"
+            display_prompt "$prompt" "$default" >&2
             read -r -p "> " result
             result="${result:-$default}"
         else
-            display_prompt "$prompt" ""
+            display_prompt "$prompt" "" >&2
             read -r -p "> " result
         fi
         
@@ -40,7 +40,7 @@ read_input() {
                 echo "$result"
                 return 0
             else
-                display_error "Неверный ввод. Попробуйте снова."
+                display_error "Неверный ввод. Попробуйте снова." >&2
                 continue
             fi
         else
@@ -176,11 +176,11 @@ confirm_action() {
     local response=""
     
     if [ "$default" = "y" ]; then
-        display_prompt "$message" "Y/n"
+        display_prompt "$message" "Y/n" >&2
         read -r -p "> " response
         response="${response:-y}"
     else
-        display_prompt "$message" "y/N"
+        display_prompt "$message" "y/N" >&2
         read -r -p "> " response
         response="${response:-n}"
     fi
@@ -325,9 +325,9 @@ read_multiline() {
     local lines=()
     local line=""
     
-    display_info "$prompt"
-    echo -e "${GRAY}(Введите '$end_marker' на новой строке для завершения)${NC}"
-    echo
+    display_info "$prompt" >&2
+    echo -e "${GRAY}(Введите '$end_marker' на новой строке для завершения)${NC}" >&2
+    echo >&2
     
     while IFS= read -r line; do
         if [ "$line" = "$end_marker" ]; then
@@ -414,11 +414,11 @@ read_port() {
     
     while true; do
         if [ -n "$default" ]; then
-            display_prompt "$prompt" "$default"
+            display_prompt "$prompt" "$default" >&2
             read -r -p "> " port
             port="${port:-$default}"
         else
-            display_prompt "$prompt" ""
+            display_prompt "$prompt" "" >&2
             read -r -p "> " port
         fi
         
@@ -426,7 +426,7 @@ read_port() {
             echo "$port"
             return 0
         else
-            display_error "Неверный порт (1-65535)"
+            display_error "Неверный порт (1-65535)" >&2
         fi
     done
 }
