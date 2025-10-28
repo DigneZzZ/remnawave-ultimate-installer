@@ -364,11 +364,12 @@ read_domain() {
     local domain=""
     
     while true; do
-        display_prompt "$prompt" ""
+        # Output prompt to stderr so it's not captured by command substitution
+        display_prompt "$prompt" "" >&2
         read -r -p "> " domain
         
         if [ -z "$domain" ]; then
-            display_error "Домен не может быть пустым"
+            display_error "Домен не может быть пустым" >&2
             continue
         fi
         
@@ -379,7 +380,7 @@ read_domain() {
             echo "$domain"
             return 0
         else
-            display_error "Неверный формат домена"
+            display_error "Неверный формат домена" >&2
         fi
     done
 }
