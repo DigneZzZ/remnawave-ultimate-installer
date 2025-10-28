@@ -78,7 +78,7 @@ sudo selfsteal templates # Управление шаблонами
 
 ---
 
-## 🏗️ Архитектура (xxphantom style)
+## 🏗️ Архитектура 
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -113,7 +113,7 @@ sudo selfsteal templates # Управление шаблонами
 - **[QUICK_START_NEW.md](QUICK_START_NEW.md)** - Подробный Quick Start с примерами
 - **[DEVELOPMENT_PROMPT.md](DEVELOPMENT_PROMPT.md)** - Архитектура и структура проекта
 - **[PROJECT_STATUS.md](PROJECT_STATUS.md)** - Статус реализации модулей
-- **[XXPHANTOM_REFACTOR.md](XXPHANTOM_REFACTOR.md)** - История рефакторинга под xxphantom стиль
+
 
 ---
 
