@@ -41,19 +41,8 @@ install_node() {
     # Collect configuration
     display_section "$ICON_CONFIG" "Конфигурация"
     
-    # Select Docker image version
-    display_info "Выберите версию образа Docker"
-    local version_choice=$(select_from_list "Версия" "Latest (стабильная)" "Dev (разработка)")
-    
-    case "$version_choice" in
-        "Latest (стабильная)")
-            DOCKER_IMAGE_TAG="latest"
-            ;;
-        "Dev (разработка)")
-            DOCKER_IMAGE_TAG="dev"
-            display_warning "Dev версия может быть нестабильной"
-            ;;
-    esac
+    # Use latest Docker image by default
+    DOCKER_IMAGE_TAG="latest"
     
     # Panel connection info
     display_info "Для подключения к панели нужны IP и сертификат"

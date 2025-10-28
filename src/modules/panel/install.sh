@@ -51,19 +51,8 @@ install_panel() {
     # Collect configuration
     display_section "$ICON_CONFIG" "Конфигурация"
     
-    # Select Docker image version
-    display_info "Выберите версию образа Docker"
-    local version_choice=$(select_from_list "Версия" "Latest (стабильная)" "Dev (разработка)")
-    
-    case "$version_choice" in
-        "Latest (стабильная)")
-            DOCKER_IMAGE_TAG="latest"
-            ;;
-        "Dev (разработка)")
-            DOCKER_IMAGE_TAG="dev"
-            display_warning "Dev версия может быть нестабильной"
-            ;;
-    esac
+    # Use latest Docker image by default
+    DOCKER_IMAGE_TAG="latest"
     
     local domain=$(read_domain "Введите домен для панели")
     local admin_email=$(read_email "Введите email администратора")
