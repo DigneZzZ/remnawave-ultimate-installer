@@ -2,8 +2,6 @@
 # Main Entry Point for Remnawave Ultimate Installer
 # Version: 1.0.0
 
-set -e
-
 # =============================================================================
 # SOURCE DEPENDENCIES
 # =============================================================================
@@ -24,8 +22,7 @@ source "$SCRIPT_DIR/lib/http.sh"
 source "$SCRIPT_DIR/lib/input.sh"
 source "$SCRIPT_DIR/lib/backup.sh"
 
-# Initialize configuration
-init_config
+# Note: init_config is called from install.sh
 
 # =============================================================================
 # MAIN MENU

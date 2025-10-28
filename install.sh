@@ -4,8 +4,6 @@
 # Author: DigneZzZ
 # Description: Universal installer for Remnawave Panel/Node with NGINX or Caddy
 
-set -e
-
 # Determine script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
