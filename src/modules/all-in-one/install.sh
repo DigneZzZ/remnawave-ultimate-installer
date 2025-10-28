@@ -58,7 +58,10 @@ install_all_in_one() {
     local domain=$(read_domain "Введите домен для панели")
     local selfsteal_domain=$(read_domain "Введите selfsteal домен (для VLESS)")
     local admin_email=$(read_email "Введите email администратора")
-    local admin_password=$(read_password_with_strength "Создайте пароль администратора" "true")
+    
+    # Generate admin password automatically
+    local admin_password=$(generate_secure_password 16)
+    display_success "Пароль администратора сгенерирован" >&2
     
     # Select reverse proxy
     display_info "Выберите reverse proxy"
@@ -109,6 +112,15 @@ install_all_in_one() {
     local xray_short_id=$(generate_xray_short_id)
     
     display_step "Все учетные данные сгенерированы"
+    echo
+    display_info "Доступ к панели:"
+    display_info "  Домен: https://$domain"
+    display_info "  Email: $admin_email"
+    display_warning "  Пароль: $admin_password"
+    echo
+    display_warning "СОХРАНИТЕ ПАРОЛЬ! Он также будет записан в файл credentials.txt"
+    echo
+    read -p "Нажмите Enter для продолжения..."
     
     # Create directory structure
     display_section "$ICON_FOLDER" "Создание структуры"

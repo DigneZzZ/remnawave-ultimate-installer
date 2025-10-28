@@ -56,7 +56,10 @@ install_panel() {
     
     local domain=$(read_domain "Введите домен для панели")
     local admin_email=$(read_email "Введите email администратора")
-    local admin_password=$(read_password_with_strength "Создайте пароль администратора" "true")
+    
+    # Generate admin password automatically
+    local admin_password=$(generate_secure_password 16)
+    display_success "Пароль администратора сгенерирован" >&2
     
     # Select reverse proxy
     display_info "Выберите reverse proxy"
@@ -100,6 +103,15 @@ install_panel() {
     local xray_uuid=$(generate_xray_uuid)
     
     display_step "Учетные данные сгенерированы"
+    echo
+    display_info "Доступ к панели:"
+    display_info "  Домен: https://$domain"
+    display_info "  Email: $admin_email"
+    display_warning "  Пароль: $admin_password"
+    echo
+    display_warning "СОХРАНИТЕ ПАРОЛЬ! Он также будет записан в файл credentials.txt"
+    echo
+    read -p "Нажмите Enter для продолжения..."
     
     # Create directory structure
     display_section "$ICON_FOLDER" "Создание структуры"

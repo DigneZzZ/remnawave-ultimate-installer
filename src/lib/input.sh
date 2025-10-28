@@ -239,27 +239,27 @@ select_from_list() {
     local choice=""
     
     if [ ${#options[@]} -eq 0 ]; then
-        display_error "Список опций пуст"
+        display_error "Список опций пуст" >&2
         return 1
     fi
     
     while true; do
-        echo
-        display_section "$ICON_MENU" "$title"
+        echo >&2
+        display_section "$ICON_MENU" "$title" >&2
         
         for i in "${!options[@]}"; do
-            display_menu_item "$((i + 1))" "${options[$i]}"
+            display_menu_item "$((i + 1))" "${options[$i]}" >&2
         done
         
-        echo
-        display_prompt "Выберите опцию (1-${#options[@]})" ""
+        echo >&2
+        display_prompt "Выберите опцию (1-${#options[@]})" "" >&2
         read -r -p "> " choice
         
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#options[@]}" ]; then
             echo "${options[$((choice - 1))]}"
             return 0
         else
-            display_error "Неверный выбор"
+            display_error "Неверный выбор" >&2
         fi
     done
 }
