@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-#!/usr/bin/env bash
 # Display Functions Library
 # Beautiful terminal UI for Remnawave Ultimate Installer
 # Author: DigneZzZ
 # Based on DigneZzZ style with enhancements from both eGames and xxphantom
+
+# Prevent double loading
+[[ -n "${DISPLAY_LOADED}" ]] && return 0
+readonly DISPLAY_LOADED=1
 
 # Source colors
 source "$(dirname "${BASH_SOURCE[0]}")/colors.sh"

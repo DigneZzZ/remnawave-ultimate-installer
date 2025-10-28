@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-#!/usr/bin/env bash
 # Validation Functions Library
 # Comprehensive validation for Remnawave Ultimate Installer
 # Author: DigneZzZ
 # Combines best practices from selfsteal.sh, eGames, and xxphantom
+
+# Prevent double loading
+[[ -n "${VALIDATION_LOADED}" ]] && return 0
+readonly VALIDATION_LOADED=1
 
 source "$(dirname "${BASH_SOURCE[0]}")/colors.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/display.sh"

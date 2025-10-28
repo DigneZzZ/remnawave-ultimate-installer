@@ -2,6 +2,10 @@
 # Color Definitions for Remnawave Ultimate Installer
 # Based on DigneZzZ style from selfsteal.sh
 
+# Prevent double loading
+[[ -n "${COLORS_LOADED}" ]] && return 0
+readonly COLORS_LOADED=1
+
 # Basic colors
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
