@@ -136,11 +136,6 @@ menu_install_panel() {
         return
     fi
     
-    if ! validate_system_requirements; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
     # Choose reverse proxy
     choose_reverse_proxy
     
@@ -189,11 +184,6 @@ menu_install_node() {
         return
     fi
     
-    if ! validate_system_requirements; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
     # Ask for Xray integration
     echo
     display_prompt "Install Xray-core" "yes"
@@ -230,11 +220,6 @@ menu_install_all_in_one() {
     
     # Pre-flight checks
     if ! validate_root; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    if ! validate_system_requirements; then
         read -p "Press Enter to continue..."
         return
     fi
@@ -279,11 +264,6 @@ menu_install_selfsteal() {
     echo
     
     if ! validate_root; then
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    if ! validate_system_requirements; then
         read -p "Press Enter to continue..."
         return
     fi
