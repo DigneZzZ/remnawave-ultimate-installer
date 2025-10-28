@@ -5,6 +5,10 @@
 # Author: DigneZzZ
 # Version: 1.0.0
 
+# Prevent double loading
+[[ -n "${ALL_IN_ONE_INSTALL_LOADED}" ]] && return 0
+readonly ALL_IN_ONE_INSTALL_LOADED=1
+
 # Source dependencies
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../config.sh"

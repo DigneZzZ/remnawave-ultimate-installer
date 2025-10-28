@@ -4,6 +4,10 @@
 # NGINX Provider - Configuration Generation
 # =============================================================================
 
+# Prevent double loading
+[[ -n "${NGINX_CONFIG_LOADED}" ]] && return 0
+readonly NGINX_CONFIG_LOADED=1
+
 # =============================================================================
 # Main Configuration Generator
 # =============================================================================

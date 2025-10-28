@@ -4,6 +4,10 @@
 # NGINX Provider - Installation & Management
 # =============================================================================
 
+# Prevent double loading
+[[ -n "${NGINX_INSTALL_LOADED}" ]] && return 0
+readonly NGINX_INSTALL_LOADED=1
+
 # Определяем путь к библиотекам относительно текущего скрипта
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/logging.sh"
